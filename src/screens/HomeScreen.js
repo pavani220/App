@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ScrollView, FlatList, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Button } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import MenuIcon from 'react-native-vector-icons/Entypo';
 
 const { width, height } = Dimensions.get("window");
-const HomeScreen = ({}) => {
+const HomeScreen = ({ navigation }) => { // Ensure navigation prop is received
   const [activeIndex, setActiveIndex] = useState(0);
   const [booked, setBooked] = useState(false);    
   const flatListRef = useRef(null);
@@ -45,12 +47,12 @@ const HomeScreen = ({}) => {
     </View>
   );
 
-  const renderDots = () => (
-    <View style={styles.dotsContainer}>
+  const renderLines = () => (
+    <View style={styles.linesContainer}>
       {HomeScreenData.map((_, index) => (
         <TouchableOpacity
           key={index}
-          style={[styles.dot, activeIndex === index ? styles.activeDot : null]}
+          style={[styles.line, activeIndex === index ? styles.activeLine : null]}
           onPress={() => setActiveIndex(index)}
         />
       ))}
@@ -61,10 +63,15 @@ const HomeScreen = ({}) => {
 
   return (
     <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-      <Text style={styles.header}>HomeScreen</Text>
+      <View style={styles.headerContainer}>
+        <MenuIcon name="menu" size={30} color="black" style={styles.icon} />
+        <Text style={styles.headerText}>Vurimi AI</Text>
+        <Icon name="user" size={30} color="black" style={styles.icon} />
+      </View>
 
-      {/* Image Slider */}
-      <View style={styles.sliderContainer}>
+
+         {/* Updated Image Slider */}
+         <View style={styles.sliderContainer}>
         <FlatList
           ref={flatListRef}
           data={HomeScreenData}
@@ -74,8 +81,10 @@ const HomeScreen = ({}) => {
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           style={styles.slider}
+          extraData={activeIndex}
+          initialScrollIndex={activeIndex}
         />
-        {renderDots()}
+        {renderLines()}
       </View>
 
       {/* Product Section */}
@@ -109,41 +118,50 @@ const HomeScreen = ({}) => {
         ))}
       </View>
 
-      {/*Footer*/}
-      <View style={{height: 150,float:'left',width:width,backgroundColor:'lightblue'}}>
-        <Button title="Go to Profile " onPress={() => navigation.navigate('Details')}  />
-        <Button title="CART" onPress={() => navigation.navigate('Cart')} />
-        <Button title="HOME" onPress={()=>navigation.navigate('Home')} />
-    
-        
+      
+      
+      {/* Go to Sign Up Button */}
+      <View style={styles.container}>
+        <Button title="Go to Sign Up" onPress={() => navigation.navigate('SignUp')} />
       </View>
-      return(
-        <View style={styles.container}>
-      <Button 
-        title="Go to Sign Up" 
-        onPress={() => {
-          return navigation.navigate('SignUp');
-        }} 
-      />
-    </View>
-      );
     </ScrollView>
   );
 };
+
 export default HomeScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    backgroundColor: "#fff",
+    paddingTop: 5,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: width * 1.08,
+    paddingHorizontal: 15,
+    marginTop: 5,
+    paddingBottom: 10,
+  },
+  headerText: {
+    fontSize: 24,
+    fontFamily: "Poppins-Bold",
+    color: "green",
+  },
+  icon: {
+    padding: 10,
+  },
+
   scrollView: {
     flex: 1,
     backgroundColor: "#fff",
   },
   scrollContent: {
     alignItems: "center",
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   header: {
     fontSize: 24,
@@ -152,42 +170,47 @@ const styles = StyleSheet.create({
   },
   sliderContainer: {
     width: width,
-    height: height * 0.4,
-    justifyContent: "center",
-    position: "relative",
+    height: height * 0.35,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   slider: {
     width: width,
     height: height * 0.3,
   },
   itemContainer: {
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     width: width,
   },
   image: {
-    width: width,
-    height: height * 0.3,
+    width: width * 0.9,
+    height: height * 0.25,
     resizeMode: "cover",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
   },
-  dotsContainer: {
-    position: "absolute",
-    bottom: 10,
-    left: 0,
-    right: 0,
-    justifyContent: "center",
-    alignItems: "center",
+  linesContainer: {
     flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 4,
+    width: '100%',
+    position: 'absolute',
+    bottom: 70,
   },
-  dot: {
-    width: 10,
-    height: 10,
+  line: {
+    width: 24,
+    height: 4,
     margin: 5,
-    borderRadius: 5,
+    borderRadius: 4,
     backgroundColor: "#bbb",
   },
-  activeDot: {
-    backgroundColor: "#fff",
+  activeLine: {
+    backgroundColor: "black",
   },
   productBlock: {
     flexDirection: "row",
