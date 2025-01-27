@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 5,
   },
   appName: {
-    fontSize: 24,
+    fontSize: 25,
     color: '#FFD700',
     marginTop: 5,
     fontStyle: 'italic',
